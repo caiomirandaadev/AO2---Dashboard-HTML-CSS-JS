@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameHub - Dashboard Steam & E-sports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#4c1d95',
+              dark: '#0f172a',
+              card: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-30 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button id="btnToggleSidebar" class="p-2 rounded-lg hover:bg-slate-700/50 text-slate-300">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-gamepad text-lg"></i>
+        </div>
+        <div>
+         <h1 class="font-bold text-lg leading-tight tracking-wide text-white">Game<span class="text-brand-500">Hub</span></h1>
+          <p class="text-xs text-slate-400">Steam & E-sports Performance</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex items-center gap-3 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700/50 text-xs">
+        <span class="text-slate-400 flex items-center gap-1">
+          <i class="fa-solid fa-[#00d2ff] fa-globe text-cyan-400"></i> API Câmbio:
+        </span>
+        <span id="rateUSD" class="font-mono text-emerald-400 font-semibold">USD: R$ --</span>
+        <span class="text-slate-600">|</span>
+        <span id="rateEUR" class="font-mono text-cyan-400 font-semibold">EUR: R$ --</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnThemeToggle" class="p-2 rounded-lg bg-slate-700/50 text-amber-400 hover:bg-slate-700 transition">
+          <i class="fa-solid fa-sun text-lg"></i>
+        </button>
+        <div class="h-6 w-px bg-slate-700"></div>
+        <div class="flex items-center gap-2 text-xs bg-slate-800 px-2 py-1 rounded-md border border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-slate-300 hidden sm:inline">Back4App:</span>
+          <span id="statusB4A" class="font-medium text-emerald-400">Pronto</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+    <aside id="sidebar" class="w-64 bg-slate-800/50 border-r border-slate-700/50 flex flex-col justify-between transition-all duration-300 z-20">
+      <nav class="p-3 space-y-1">
+        <button data-target="secDashboard" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium bg-brand-600 text-white shadow-md shadow-brand-600/20">
+          <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+          <span>Dashboard Principal</span>
+        </button>
+        <button data-target="secMetas" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 transition">
+          <i class="fa-solid fa-trophy w-5 text-center"></i>
+          <span>Metas & Torneios (CRUD)</span>
+        </button>
+        <button data-target="secSettings" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 transition">
+          <i class="fa-solid fa-sliders w-5 text-center"></i>
+          <span>Configurações / Back4App</span>
+        </button>
+        <button data-target="secDocs" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 transition">
+          <i class="fa-solid fa-graduation-cap w-5 text-center"></i>
+          <span>Guia A02 UNICAP</span>
+        </button>
+      </nav>
+
+      <div class="p-3 border-t border-slate-700/50 bg-slate-900/30">
+        <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700/50 text-xs space-y-1.5">
+          <div class="font-semibold text-slate-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-users text-brand-500"></i> Projeto A02 UNICAP
+          </div>
+          <p class="text-slate-400">Sistemas para Internet</p>
+          <div class="pt-1 text-[11px] text-slate-500 border-t border-slate-700/40 flex justify-between">
+            <span>Prazo: 06/11/2026</span>
+            <span class="text-emerald-400 font-bold">6,0 pts</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+      
+      <section id="secDashboard" class="tab-content space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-800/40 p-4 rounded-2xl border border-slate-700/50">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-fire text-amber-500"></i> Visão Geral do Mercado Gamer
+            </h2>
+            <p class="text-xs text-slate-400">Métricas consolidadas de jogadores na Steam e premiações globais de e-sports</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+              <input type="text" id="filterSearch" placeholder="Buscar título..." class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg pl-8 pr-3 py-2 focus:outline-none focus:border-brand-500 w-36 sm:w-48">
+            </div>
+
+            <select id="filterGenre" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-500">
+              <option value="ALL">Todos os Gêneros</option>
+              <option value="FPS">FPS / Shooter</option>
+              <option value="MOBA">MOBA</option>
+              <option value="Battle Royale">Battle Royale</option>
+              <option value="RPG">RPG / Action</option>
+              <option value="Strategy">Estratégia</option>
+            </select>
+
+            <select id="filterYear" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-500">
+              <option value="ALL">Todos os Anos</option>
+              <option value="2026">Temporada 2026</option>
+              <option value="2025">Temporada 2025</option>
+              <option value="2024">Temporada 2024</option>
+            </select>
+
+            <select id="filterCurrency" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-500 font-semibold text-brand-500">
+              <option value="USD">USD ($)</option>
+              <option value="BRL">BRL (R$)</option>
+              <option value="EUR">EUR (€)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50 shadow-sm relative overflow-hidden group">
+            <div class="absolute -right-2 -bottom-2 text-slate-700/20 text-6xl group-hover:scale-110 transition">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Pico Simultâneo (CCU)</p>
+            <h3 id="kpiCCU" class="text-2xl font-black text-white mt-1">0</h3>
+            <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-2">
+              <i class="fa-solid fa-arrow-trend-up"></i> +12.4% no último mês
+            </span>
+          </div>
+
+          <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50 shadow-sm relative overflow-hidden group">
+            <div class="absolute -right-2 -bottom-2 text-slate-700/20 text-6xl group-hover:scale-110 transition">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Títulos Analisados</p>
+            <h3 id="kpiGames" class="text-2xl font-black text-white mt-1">0</h3>
+            <span class="text-[11px] text-cyan-400 flex items-center gap-1 mt-2">
+              <i class="fa-solid fa-database"></i> Amostragem Steam API
+            </span>
+          </div>
+
+          <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50 shadow-sm relative overflow-hidden group">
+            <div class="absolute -right-2 -bottom-2 text-slate-700/20 text-6xl group-hover:scale-110 transition">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Premiações Totais</p>
+            <h3 id="kpiPrize" class="text-2xl font-black text-emerald-400 mt-1">$ 0</h3>
+            <span id="kpiPrizeSub" class="text-[11px] text-slate-400 flex items-center gap-1 mt-2">
+              Convertido via AwesomeAPI
+            </span>
+          </div>
+
+          <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50 shadow-sm relative overflow-hidden group">
+            <div class="absolute -right-2 -bottom-2 text-slate-700/20 text-6xl group-hover:scale-110 transition">
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Avaliação Média Steam</p>
+            <h3 id="kpiRating" class="text-2xl font-black text-amber-400 mt-1">0%</h3>
+            <span class="text-[11px] text-amber-400/80 flex items-center gap-1 mt-2">
+              <i class="fa-solid fa-thumbs-up"></i> Análises Muito Positivas
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-white text-base">Evolução Mensal de Jogadores Simultâneos</h3>
+                <p class="text-xs text-slate-400">Média de pico de CCU em milhares ao longo do ano</p>
+              </div>
+              <span class="text-xs bg-brand-500/10 text-brand-400 px-2.5 py-1 rounded-full border border-brand-500/20">Gráfico 1: Linha</span>
+            </div>
+            <div class="h-64 relative">
+              <canvas id="chartLineCCU"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-white text-base">Distribuição por Gênero</h3>
+                <p class="text-xs text-slate-400">Participação de mercado em %</p>
+              </div>
+              <span class="text-xs bg-cyan-500/10 text-cyan-400 px-2.5 py-1 rounded-full border border-cyan-500/20">Gráfico 2: Rosca</span>
+            </div>
+            <div class="h-64 relative flex items-center justify-center">
+              <canvas id="chartDonutGenres"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-white text-base">Top Jogos por Premiação de E-sports</h3>
+                <p class="text-xs text-slate-400">Total distribuído em torneios na moeda selecionada</p>
+              </div>
+              <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20">Gráfico 3: Barras</span>
+            </div>
+            <div class="h-64 relative">
+              <canvas id="chartBarPrizes"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-bold text-white text-base">Jogos em Destaque</h3>
+                <i class="fa-solid fa-fire text-amber-500"></i>
+              </div>
+              <div id="featuredGamesList" class="space-y-3 overflow-y-auto max-h-56 pr-1">
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-700/50 text-[11px] text-slate-400 flex justify-between items-center">
+              <span>Fonte: Steam API & Liquipedia</span>
+              <button onclick="switchTab('secMetas')" class="text-brand-400 hover:underline">Ver metas de torneios &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="secMetas" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/40 p-4 rounded-2xl border border-slate-700/50">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-amber-400"></i> Gestão de Metas & Torneios (CRUD Back4App)
+            </h2>
+            <p class="text-xs text-slate-400">Cadastre e acompanhe o orçamento e premiação mínima projetada para os campeonatos</p>
+          </div>
+
+          <button id="btnOpenModalMeta" class="bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-brand-600/30 flex items-center gap-2 transition">
+            <i class="fa-solid fa-plus"></i> Nova Meta de Torneio
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-white text-base">Comparativo: Meta vs Executado</h3>
+              <span class="text-xs text-slate-400">Valores em $ USD</span>
+            </div>
+            <div class="h-64 relative">
+              <canvas id="chartCrudComparison"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/50 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-white text-base mb-2">Resumo das Metas</h3>
+              <p class="text-xs text-slate-400 mb-4">Progresso acumulado do planejamento financeiro dos e-sports</p>
+
+              <div class="space-y-4">
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700/40">
+                  <span class="text-xs text-slate-400">Total de Metas Cadastradas</span>
+                  <div id="statTotalMetas" class="text-2xl font-bold text-white mt-0.5">0</div>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700/40">
+                  <span class="text-xs text-slate-400">Volume Total Alvo ($)</span>
+                  <div id="statTargetAmount" class="text-2xl font-bold text-emerald-400 mt-0.5">$ 0</div>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700/40">
+                  <span class="text-xs text-slate-400">Média de Conclusão</span>
+                  <div id="statAvgProgress" class="text-2xl font-bold text-cyan-400 mt-0.5">0%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-slate-500 pt-3 border-t border-slate-700/40">
+              Sincronizado automaticamente via API REST do Back4App
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/60 rounded-2xl border border-slate-700/50 overflow-hidden">
+          <div class="p-4 border-b border-slate-700/50 flex items-center justify-between">
+            <h3 class="font-bold text-white text-sm">Lista de Metas do Banco de Dados</h3>
+            <button id="btnRefreshMetas" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition">
+              <i class="fa-solid fa-rotate"></i> Atualizar
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-900/50 text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-700/50">
+                  <th class="p-3 pl-4">Torneio / Meta</th>
+                  <th class="p-3">Jogo</th>
+                  <th class="p-3">Alvo ($)</th>
+                  <th class="p-3">Atual ($)</th>
+                  <th class="p-3">Progresso</th>
+                  <th class="p-3 text-right pr-4">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tableMetasBody" class="divide-y divide-slate-700/40 text-xs text-slate-300">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="secSettings" class="tab-content hidden space-y-6">
+        <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700/50 max-w-2xl">
+          <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-2">
+            <i class="fa-solid fa-key text-brand-400"></i> Credenciais do Back4App
+          </h2>
+          <p class="text-xs text-slate-400 mb-6">
+            Insira abaixo as chaves do seu aplicativo criado no Back4App. Caso deixe em branco ou offline, a aplicação utilizará um armazenamento local seguro no navegador (LocalStorage) para garantir que o CRUD funcione perfeitamente.
+          </p>
+
+          <form id="formB4AConfig" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Application ID</label>
+              <input type="text" id="inputAppId" placeholder="Ex: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">REST API Key</label>
+              <input type="text" id="inputRestKey" placeholder="Ex: yyyyyyyyyyyyyyyyyyyyyyyyyyyyy" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 font-mono">
+            </div>
+
+            <div class="pt-2 flex items-center gap-3">
+              <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs px-5 py-2.5 rounded-xl shadow-md transition">
+                Salvar Credenciais
+              </button>
+              <button type="button" id="btnTestB4A" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-4 py-2.5 rounded-xl transition">
+                Testar Conexão
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="secDocs" class="tab-content hidden space-y-6">
+        <div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-700/50 space-y-6 max-w-4xl">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-brand-400"></i> Checklist & Requisitos da A02 (UNICAP)
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              Verificação dos critérios de avaliação para a obtenção dos 6,0 pontos da atividade.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-700/50 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                <i class="fa-solid fa-circle-check"></i> 1. Dashboard com Chart.js (OK)
+              </div>
+              <p class="text-xs text-slate-300">
+                Apresenta 3 gráficos funcionais de 3 tipos diferentes: Linha (Evolução CCU), Rosca (Gêneros) e Barras (Premiações por Jogo).
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-700/50 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                <i class="fa-solid fa-circle-check"></i> 2. Interatividade JS (OK)
+              </div>
+              <p class="text-xs text-slate-300">
+                Filtros combinados em tempo real por ano, gênero, busca textual e conversor instantâneo de moedas nos gráficos.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-700/50 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                <i class="fa-solid fa-circle-check"></i> 3. CRUD Back-end Back4App (OK)
+              </div>
+              <p class="text-xs text-slate-300">
+                Completo com Criar, Listar, Editar e Excluir metas integradas diretamente ao ecossistema e-sports.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-700/50 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                <i class="fa-solid fa-circle-check"></i> 4. API Pública de Terceiros (OK)
+              </div>
+              <p class="text-xs text-slate-300">
+                Consumo da AwesomeAPI (Moedas/Câmbio) com suporte a CORS para conversão em tempo real de BRL, USD e EUR.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-brand-900/20 border border-brand-500/30 rounded-xl space-y-2">
+            <h3 class="font-bold text-white text-xs uppercase tracking-wider">Roteiro Recomendado para o Vídeo (Máx. 4 minutos)</h3>
+            <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1">
+              <li><strong>0:00 - 0:45:</strong> Apresentação dos integrantes e introdução ao tema (Steam & E-sports).</li>
+              <li><strong>0:45 - 1:45:</strong> Demonstração dos 3 gráficos interativos e aplicação dos filtros.</li>
+              <li><strong>1:45 - 2:45:</strong> Demonstração do CRUD (cadastrar, editar e excluir uma meta) e API de Câmbio.</li>
+              <li><strong>2:45 - 4:00:</strong> Exibição do código no GitHub e encerramento com o site no ar na Vercel/Render.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="modalMeta" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in">
+      <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+        <h3 id="modalTitle" class="font-bold text-white text-sm">Nova Meta de Torneio</h3>
+        <button id="btnCloseModal" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formMeta" class="p-4 space-y-4">
+        <input type="hidden" id="metaId">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Nome da Meta / Torneio</label>
+          <input type="text" id="metaTitle" required placeholder="Ex: Premiação Mínima Major CS2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Jogo</label>
+            <select id="metaGame" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+              <option value="Counter-Strike 2">Counter-Strike 2</option>
+              <option value="Dota 2">Dota 2</option>
+              <option value="League of Legends">League of Legends</option>
+              <option value="Valorant">Valorant</option>
+              <option value="Apex Legends">Apex Legends</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Prazo / Ano</label>
+            <input type="text" id="metaDeadline" required placeholder="Ex: Q4 2026" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Valor Alvo ($ USD)</label>
+            <input type="number" id="metaTarget" required min="1" placeholder="Ex: 1250000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Valor Atual ($ USD)</label>
+            <input type="number" id="metaCurrent" required min="0" placeholder="Ex: 500000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2 border-t border-slate-700/50">
+          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-700 transition">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-medium bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 transition">Salvar Meta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
