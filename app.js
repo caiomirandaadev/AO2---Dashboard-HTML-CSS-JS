@@ -40,10 +40,7 @@ function initUIEvents() {
     btnToggle.addEventListener('click', () => sidebar.classList.toggle('-ml-64'));
   }
 
-  const btnTheme = document.getElementById('btnThemeToggle');
-  if (btnTheme) {
-    btnTheme.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-  }
+  
 
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
