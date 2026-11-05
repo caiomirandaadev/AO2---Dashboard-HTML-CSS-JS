@@ -2,15 +2,15 @@ let b4aAppId = localStorage.getItem('b4a_app_id') || '';
 let b4aRestKey = localStorage.getItem('b4a_rest_key') || '';
 
 const rawGamesData = [
-  { id: 1, name: 'Counter-Strike 2', genre: 'FPS', ccu: 1420000, prizeUSD: 2250000, rating: 88, year: '2026', icon: 'fa-crosshairs', color: '#8b5cf6' },
-  { id: 2, name: 'Dota 2', genre: 'MOBA', ccu: 780000, prizeUSD: 15200000, rating: 82, year: '2026', icon: 'fa-shield-halved', color: '#06b6d4' },
-  { id: 3, name: 'PUBG: BATTLEGROUNDS', genre: 'Battle Royale', ccu: 620000, prizeUSD: 3100000, rating: 71, year: '2025', icon: 'fa-person-rifle', color: '#f59e0b' },
-  { id: 4, name: 'Apex Legends', genre: 'Battle Royale', ccu: 390000, prizeUSD: 2000000, rating: 78, year: '2026', icon: 'fa-jet-fighter', color: '#ef4444' },
-  { id: 5, name: 'GTA V / FiveM', genre: 'RPG', ccu: 290000, prizeUSD: 450000, rating: 90, year: '2024', icon: 'fa-car', color: '#10b981' },
-  { id: 6, name: 'Baldur\'s Gate 3', genre: 'RPG', ccu: 180000, prizeUSD: 100000, rating: 96, year: '2024', icon: 'fa-dice-d20', color: '#ec4899' },
-  { id: 7, name: 'Valorant', genre: 'FPS', ccu: 950000, prizeUSD: 4500000, rating: 85, year: '2026', icon: 'fa-gun', color: '#f43f5e' },
-  { id: 8, name: 'League of Legends', genre: 'MOBA', ccu: 1850000, prizeUSD: 5000000, rating: 80, year: '2026', icon: 'fa-hat-wizard', color: '#3b82f6' },
-  { id: 9, name: 'Age of Empires II', genre: 'Strategy', ccu: 45000, prizeUSD: 300000, rating: 94, year: '2025', icon: 'fa-chess-king', color: '#84cc16' }
+  { id: 1, name: 'Counter-Strike 2', genre: 'FPS', ccu: 1420000, prizeUSD: 2250000, rating: 88, year: '2026', icon: 'fa-crosshairs', color: '#6366f1' },
+  { id: 2, name: 'Dota 2', genre: 'MOBA', ccu: 780000, prizeUSD: 15200000, rating: 82, year: '2026', icon: 'fa-shield-halved', color: '#02b8cc' },
+  { id: 3, name: 'PUBG: BATTLEGROUNDS', genre: 'Battle Royale', ccu: 620000, prizeUSD: 3100000, rating: 71, year: '2025', icon: 'fa-person-rifle', color: '#e4f222' },
+  { id: 4, name: 'Apex Legends', genre: 'Battle Royale', ccu: 390000, prizeUSD: 2000000, rating: 78, year: '2026', icon: 'fa-jet-fighter', color: '#eb5757' },
+  { id: 5, name: 'GTA V / FiveM', genre: 'RPG', ccu: 290000, prizeUSD: 450000, rating: 90, year: '2024', icon: 'fa-car', color: '#27a644' },
+  { id: 6, name: 'Baldur\'s Gate 3', genre: 'RPG', ccu: 180000, prizeUSD: 100000, rating: 96, year: '2024', icon: 'fa-dice-d20', color: '#8b5cf6' },
+  { id: 7, name: 'Valorant', genre: 'FPS', ccu: 950000, prizeUSD: 4500000, rating: 85, year: '2026', icon: 'fa-gun', color: '#eb5757' },
+  { id: 8, name: 'League of Legends', genre: 'MOBA', ccu: 1850000, prizeUSD: 5000000, rating: 80, year: '2026', icon: 'fa-hat-wizard', color: '#6366f1' },
+  { id: 9, name: 'Age of Empires II', genre: 'Strategy', ccu: 45000, prizeUSD: 300000, rating: 94, year: '2025', icon: 'fa-chess-king', color: '#27a644' }
 ];
 
 const ccuMonthlyTrend = {
@@ -86,9 +86,9 @@ function switchTab(targetId) {
 
   document.querySelectorAll('.nav-item').forEach(btn => {
     if (btn.getAttribute('data-target') === targetId) {
-      btn.className = 'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium bg-brand-600 text-white shadow-md shadow-brand-600/20';
+      btn.className = 'nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium bg-[#161718] text-[#ffffff] border border-[#23252a] shadow-sm';
     } else {
-      btn.className = 'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 transition';
+      btn.className = 'nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-[#8a8f98] hover:bg-[#161718] hover:text-[#ffffff] transition';
     }
   });
 }
@@ -165,16 +165,16 @@ function renderLineChart() {
         {
           label: '2026 (k Jogadores)',
           data: ccuMonthlyTrend.data2026,
-          borderColor: '#8b5cf6',
-          backgroundColor: 'rgba(139, 92, 246, 0.15)',
+          borderColor: '#e4f222',
+          backgroundColor: 'rgba(228, 242, 34, 0.08)',
           fill: true,
           tension: 0.4,
-          borderWidth: 3
+          borderWidth: 2
         },
         {
           label: '2025 (k Jogadores)',
           data: ccuMonthlyTrend.data2025,
-          borderColor: '#06b6d4',
+          borderColor: '#02b8cc',
           borderDash: [5, 5],
           fill: false,
           tension: 0.4,
@@ -185,10 +185,10 @@ function renderLineChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+      plugins: { legend: { labels: { color: '#8a8f98', font: { size: 11 } } } },
       scales: {
-        x: { ticks: { color: '#64748b' }, grid: { display: false } },
-        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(51, 65, 85, 0.3)' } }
+        x: { ticks: { color: '#62666d' }, grid: { display: false } },
+        y: { ticks: { color: '#62666d' }, grid: { color: 'rgba(35, 37, 42, 0.5)' } }
       }
     }
   });
@@ -209,14 +209,14 @@ function renderDonutChart(data) {
       labels: genres,
       datasets: [{
         data: counts,
-        backgroundColor: ['#8b5cf6', '#06b6d4', '#f59e0b', '#ec4899', '#84cc16'],
+        backgroundColor: ['#6366f1', '#02b8cc', '#e4f222', '#eb5757', '#27a644'],
         borderWidth: 0
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } },
+      plugins: { legend: { position: 'bottom', labels: { color: '#8a8f98', font: { size: 10 } } } },
       cutout: '70%'
     }
   });
@@ -237,8 +237,8 @@ function renderBarChart(data, currency, rate) {
       datasets: [{
         label: `Premiação (${currency})`,
         data: sorted.map(g => g.prizeUSD * rate),
-        backgroundColor: '#10b981',
-        borderRadius: 8
+        backgroundColor: '#27a644',
+        borderRadius: 6
       }]
     },
     options: {
@@ -246,8 +246,8 @@ function renderBarChart(data, currency, rate) {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { color: '#64748b' }, grid: { display: false } },
-        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(51, 65, 85, 0.3)' } }
+        x: { ticks: { color: '#62666d' }, grid: { display: false } },
+        y: { ticks: { color: '#62666d' }, grid: { color: 'rgba(35, 37, 42, 0.5)' } }
       }
     }
   });
@@ -260,20 +260,20 @@ function renderFeaturedList(data, currency, rate) {
 
   data.slice(0, 4).forEach(g => {
     const item = document.createElement('div');
-    item.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-700/40 text-xs';
+    item.className = 'flex items-center justify-between p-2.5 rounded-lg bg-[#161718] border border-[#23252a] text-xs';
     item.innerHTML = `
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background-color: ${g.color}">
+        <div class="w-7 h-7 rounded-md flex items-center justify-center text-white" style="background-color: ${g.color}">
           <i class="fa-solid ${g.icon}"></i>
         </div>
         <div>
-          <div class="font-bold text-white">${g.name}</div>
-          <div class="text-[10px] text-slate-400">${g.genre} • Steam Rating: ${g.rating}%</div>
+          <div class="font-semibold text-[#ffffff]">${g.name}</div>
+          <div class="text-[10px] text-[#8a8f98]">${g.genre} | Steam Rating: ${g.rating}%</div>
         </div>
       </div>
       <div class="text-right">
-        <div class="font-bold text-emerald-400">${formatCurrency(g.prizeUSD * rate, currency)}</div>
-        <div class="text-[10px] text-slate-500">${(g.ccu / 1000).toFixed(0)}k CCU</div>
+        <div class="font-semibold text-[#e4f222]">${formatCurrency(g.prizeUSD * rate, currency)}</div>
+        <div class="text-[10px] text-[#62666d]">${(g.ccu / 1000).toFixed(0)}k CCU</div>
       </div>
     `;
     container.appendChild(item);
@@ -304,7 +304,7 @@ async function loadMetas() {
           }));
           if (statusEl) {
             statusEl.textContent = 'Back4App OK';
-            statusEl.className = 'font-medium text-emerald-400';
+            statusEl.className = 'font-medium text-[#27a644]';
           }
           renderMetasTable();
           renderCrudStatsAndChart();
@@ -316,7 +316,7 @@ async function loadMetas() {
 
   if (statusEl) {
     statusEl.textContent = 'Modo Local';
-    statusEl.className = 'font-medium text-amber-400';
+    statusEl.className = 'font-medium text-[#e4f222]';
   }
   loadLocalMetas();
   renderMetasTable();
@@ -349,23 +349,23 @@ function renderMetasTable() {
   metasData.forEach(m => {
     const pct = Math.min(100, Math.round((m.current / m.target) * 100));
     const tr = document.createElement('tr');
-    tr.className = 'hover:bg-slate-700/30 transition';
+    tr.className = 'hover:bg-[#161718] transition';
     tr.innerHTML = `
-      <td class="p-3 pl-4 font-semibold text-white">${m.title}</td>
-      <td class="p-3"><span class="bg-slate-700 px-2 py-0.5 rounded text-[10px] text-slate-300">${m.game}</span></td>
-      <td class="p-3 font-mono text-emerald-400">$ ${m.target.toLocaleString()}</td>
-      <td class="p-3 font-mono text-cyan-400">$ ${m.current.toLocaleString()}</td>
+      <td class="p-3 pl-4 font-semibold text-[#ffffff]">${m.title}</td>
+      <td class="p-3"><span class="bg-[#161718] px-2 py-0.5 rounded border border-[#23252a] text-[10px] text-[#e5e5e6]">${m.game}</span></td>
+      <td class="p-3 font-mono text-[#e4f222]">$ ${m.target.toLocaleString()}</td>
+      <td class="p-3 font-mono text-[#02b8cc]">$ ${m.current.toLocaleString()}</td>
       <td class="p-3 w-32">
         <div class="flex items-center gap-2">
-          <div class="flex-1 bg-slate-700 rounded-full h-1.5 overflow-hidden">
-            <div class="bg-brand-500 h-full rounded-full" style="width: ${pct}%"></div>
+          <div class="flex-1 bg-[#23252a] rounded-full h-1.5 overflow-hidden">
+            <div class="bg-[#e4f222] h-full rounded-full" style="width: ${pct}%"></div>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold">${pct}%</span>
+          <span class="text-[10px] text-[#8a8f98] font-bold">${pct}%</span>
         </div>
       </td>
       <td class="p-3 text-right pr-4 space-x-2">
-        <button onclick="editMeta('${m.id}')" class="text-brand-400 hover:text-brand-300 p-1"><i class="fa-solid fa-pen"></i></button>
-        <button onclick="deleteMeta('${m.id}')" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>
+        <button onclick="editMeta('${m.id}')" class="text-[#8a8f98] hover:text-[#ffffff] p-1"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="deleteMeta('${m.id}')" class="text-[#eb5757] hover:text-red-300 p-1"><i class="fa-solid fa-trash"></i></button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -395,17 +395,17 @@ function renderCrudStatsAndChart() {
     data: {
       labels: metasData.map(m => m.title.length > 15 ? m.title.substring(0, 15) + '...' : m.title),
       datasets: [
-        { label: 'Alvo ($)', data: metasData.map(m => m.target), backgroundColor: '#334155', borderRadius: 6 },
-        { label: 'Atual ($)', data: metasData.map(m => m.current), backgroundColor: '#8b5cf6', borderRadius: 6 }
+        { label: 'Alvo ($)', data: metasData.map(m => m.target), backgroundColor: '#383b3f', borderRadius: 4 },
+        { label: 'Atual ($)', data: metasData.map(m => m.current), backgroundColor: '#6366f1', borderRadius: 4 }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      plugins: { legend: { labels: { color: '#8a8f98' } } },
       scales: {
-        x: { ticks: { color: '#64748b' }, grid: { display: false } },
-        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(51, 65, 85, 0.3)' } }
+        x: { ticks: { color: '#62666d' }, grid: { display: false } },
+        y: { ticks: { color: '#62666d' }, grid: { color: 'rgba(35, 37, 42, 0.5)' } }
       }
     }
   });
