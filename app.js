@@ -37,15 +37,19 @@ function initUIEvents() {
   const btnToggle = document.getElementById('btnToggleSidebar');
   const sidebar = document.getElementById('sidebar');
   if (btnToggle && sidebar) {
-    btnToggle.addEventListener('click', () => sidebar.classList.toggle('-ml-64'));
+    btnToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+    });
   }
-
-  
 
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const target = e.currentTarget.getAttribute('data-target');
       switchTab(target);
+      // No telemóvel, fecha o menu ao selecionar uma aba
+      if (window.innerWidth < 768 && sidebar) {
+        sidebar.classList.add('-translate-x-full');
+      }
     });
   });
 
